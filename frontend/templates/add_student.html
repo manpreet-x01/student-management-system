@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub | Add Student</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <h2>StudentHub</h2>
+                <span>Management System</span>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="/students" class="nav-link">
+                👨‍🎓 View Students
+            </a>
+
+            <a href="/add_student" class="nav-link active">
+                ➕ Add Student
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="creator">
+
+                <div class="avatar">M</div>
+
+                <div>
+                    <strong>Manpreet Singh</strong>
+                    <small>BCA Student</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">Student Management</p>
+
+                <h1>Add New Student</h1>
+
+                <p class="subtitle">
+                    Enter student details and academic information.
+                </p>
+
+            </div>
+
+            <div class="header-actions">
+
+                <a href="/students" class="refresh-btn">
+                    ← Back
+                </a>
+
+            </div>
+
+        </header>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <section class="form-card">
+
+            <form method="POST" action="/add_student">
+
+                <div class="form-section">
+
+                    <h2>👤 Student Information</h2>
+
+                    <p>Basic information about the student.</p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Roll Number *</label>
+
+                        <input
+                            type="text"
+                            name="roll_no"
+                            placeholder="Example: BCA001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Student Name *</label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Enter full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Department *</label>
+
+                        <select name="department" required>
+
+                            <option value="">
+                                Select Department
+                            </option>
+
+                            <option value="BCA">BCA</option>
+                            <option value="BBA">BBA</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="MCA">MCA</option>
+                            <option value="MBA">MBA</option>
+                            <option value="Other">Other</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Semester *</label>
+
+                        <select name="semester" required>
+
+                            <option value="">
+                                Select Semester
+                            </option>
+
+                            {% for i in range(1, 9) %}
+
+                                <option value="{{ i }}">
+                                    Semester {{ i }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="student@example.com"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Phone</label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            placeholder="10 digit mobile number"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-section performance-section">
+
+                    <h2>📊 Academic Performance</h2>
+
+                    <p>Enter marks and attendance percentage.</p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Marks (%)</label>
+
+                        <input
+                            type="number"
+                            name="marks"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            value="0"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Attendance (%)</label>
+
+                        <input
+                            type="number"
+                            name="attendance"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            value="0"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a href="/students" class="cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-btn">
+                        ✓ Add Student
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <footer>
+
+            <div>
+                <p>Student Management System © 2026</p>
+                <p>Made by <strong>Manpreet Singh</strong></p>
+            </div>
+
+            <p>BCA Student Project</p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

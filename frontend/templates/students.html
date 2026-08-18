@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub | Students</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <h2>StudentHub</h2>
+                <span>Management System</span>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="/students" class="nav-link active">
+                👨‍🎓 View Students
+            </a>
+
+            <a href="/add_student" class="nav-link">
+                ➕ Add Student
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="creator">
+
+                <div class="avatar">M</div>
+
+                <div>
+                    <strong>Manpreet Singh</strong>
+                    <small>BCA Student</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">Student Records</p>
+
+                <h1>All Students</h1>
+
+                <p class="subtitle">
+                    Search, edit and delete student records.
+                </p>
+
+            </div>
+
+            <div class="header-actions">
+
+                <a href="/add_student" class="add-btn">
+                    + Add Student
+                </a>
+
+                <a href="/" class="refresh-btn">
+                    Dashboard
+                </a>
+
+            </div>
+
+        </header>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <section class="table-card">
+
+            <div class="search-area">
+
+                <form method="GET"
+                      action="/students"
+                      class="search-form">
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Search student..."
+                    >
+
+                    <button type="submit">
+                        🔍 Search
+                    </button>
+
+                    {% if search %}
+
+                        <a href="/students" class="clear-btn">
+                            Clear
+                        </a>
+
+                    {% endif %}
+
+                </form>
+
+
+                <a href="/add_student" class="view-btn">
+                    + New Student
+                </a>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Roll No</th>
+                            <th>Student</th>
+                            <th>Department</th>
+                            <th>Semester</th>
+                            <th>Marks</th>
+                            <th>Attendance</th>
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% if students %}
+
+                        {% for student in students %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>{{ student.roll_no }}</strong>
+                                </td>
+
+
+                                <td>
+
+                                    <div class="student-cell">
+
+                                        <div class="student-avatar">
+                                            {{ student.name[0]|upper }}
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                {{ student.name }}
+                                            </strong>
+
+                                            <small>
+                                                {{ student.email or "No email" }}
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    <span class="department-tag">
+                                        {{ student.department }}
+                                    </span>
+                                </td>
+
+
+                                <td>
+                                    Semester {{ student.semester }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if student.marks >= 40 %}
+
+                                        <span class="marks-good">
+                                            {{ student.marks }}%
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="marks-bad">
+                                            {{ student.marks }}%
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+                                    {{ student.attendance }}%
+                                </td>
+
+
+                                <td>
+
+                                    <div class="action-buttons">
+
+                                        <a
+                                            href="{{ url_for('edit_student', id=student.id) }}"
+                                            class="edit-btn">
+                                            ✏️ Edit
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for('delete_student', id=student.id) }}"
+                                            onsubmit="return confirm('Delete this student?');">
+
+                                            <button
+                                                type="submit"
+                                                class="delete-btn">
+                                                🗑 Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="7" class="empty">
+
+                                {% if search %}
+                                    No student found for "{{ search }}".
+                                {% else %}
+                                    No students have been added yet.
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            <div>
+                <p>Student Management System © 2026</p>
+                <p>Made by <strong>Manpreet Singh</strong></p>
+            </div>
+
+            <p>BCA Student Project</p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub | Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <h2>StudentHub</h2>
+                <span>Management System</span>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-link active">
+                🏠 Dashboard
+            </a>
+
+            <a href="/students" class="nav-link">
+                👨‍🎓 View Students
+            </a>
+
+            <a href="/add_student" class="nav-link">
+                ➕ Add Student
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="creator">
+
+                <div class="avatar">M</div>
+
+                <div>
+                    <strong>Manpreet Singh</strong>
+                    <small>BCA Student</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">Student Management</p>
+
+                <h1>Student Dashboard</h1>
+
+                <p class="subtitle">
+                    View student records and academic performance.
+                </p>
+
+            </div>
+
+            <div class="header-actions">
+
+                <a href="/add_student" class="add-btn">
+                    + Add Student
+                </a>
+
+                <button onclick="loadDashboard()" class="refresh-btn">
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="stats-grid">
+
+            <div class="stat-card blue">
+
+                <div class="stat-icon">👨‍🎓</div>
+
+                <div>
+                    <p>Total Students</p>
+                    <h2 id="totalStudents">0</h2>
+                    <span>Registered students</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card purple">
+
+                <div class="stat-icon">📊</div>
+
+                <div>
+                    <p>Average Marks</p>
+                    <h2 id="averageMarks">0%</h2>
+                    <span>Overall performance</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card green">
+
+                <div class="stat-icon">📅</div>
+
+                <div>
+                    <p>Attendance</p>
+                    <h2 id="averageAttendance">0%</h2>
+                    <span>Average attendance</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card orange">
+
+                <div class="stat-icon">🏆</div>
+
+                <div>
+                    <p>Top Student</p>
+                    <h2 id="topStudent">No Students</h2>
+                    <span id="topMarks">0% marks</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="charts-grid">
+
+            <div class="chart-card large">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Students by Department</h3>
+                        <p>Number of students in each department</p>
+                    </div>
+
+                    <span class="chart-badge">Department</span>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="departmentChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Pass vs Fail</h3>
+                        <p>Student result distribution</p>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="passFailChart"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="charts-grid">
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Department Marks</h3>
+                        <p>Average marks by department</p>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="marksChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Department Attendance</h3>
+                        <p>Average attendance by department</p>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="chart-card semester-card">
+
+            <div class="chart-header">
+
+                <div>
+                    <h3>Semester-wise Students</h3>
+                    <p>Student distribution by semester</p>
+                </div>
+
+                <span class="chart-badge">Semester</span>
+
+            </div>
+
+            <div class="chart-container semester-chart">
+                <canvas id="semesterChart"></canvas>
+            </div>
+
+        </section>
+
+
+        <section class="table-card">
+
+            <div class="table-header">
+
+                <div>
+                    <h2>Department Performance</h2>
+
+                    <p>
+                        Academic performance by department
+                    </p>
+                </div>
+
+                <a href="/students" class="view-btn">
+                    View Students →
+                </a>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Department</th>
+                            <th>Students</th>
+                            <th>Avg Marks</th>
+                            <th>Attendance</th>
+                            <th>Passed</th>
+                            <th>Failed</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="departmentTableBody">
+
+                        <tr>
+                            <td colspan="6" class="empty">
+                                Loading...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <section class="tools-card">
+
+            <h2>Tools Used</h2>
+
+            <div class="tools-list">
+
+                <span>Python</span>
+                <span>Flask</span>
+                <span>MySQL</span>
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>JavaScript</span>
+                <span>Chart.js</span>
+                <span>VS Code</span>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            <div>
+                <p>Student Management System © 2026</p>
+                <p>Made by <strong>Manpreet Singh</strong></p>
+            </div>
+
+            <div>
+                <p>BCA Student Project</p>
+            </div>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

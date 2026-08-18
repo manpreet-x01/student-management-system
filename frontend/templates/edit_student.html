@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub | Edit Student</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <h2>StudentHub</h2>
+                <span>Management System</span>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="/students" class="nav-link active">
+                👨‍🎓 View Students
+            </a>
+
+            <a href="/add_student" class="nav-link">
+                ➕ Add Student
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="creator">
+
+                <div class="avatar">M</div>
+
+                <div>
+                    <strong>Manpreet Singh</strong>
+                    <small>BCA Student</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">Student Records</p>
+
+                <h1>Edit Student</h1>
+
+                <p class="subtitle">
+                    Update the student's information.
+                </p>
+
+            </div>
+
+            <div class="header-actions">
+
+                <a href="/students" class="refresh-btn">
+                    ← Back to Students
+                </a>
+
+            </div>
+
+        </header>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <section class="form-card">
+
+            <form method="POST">
+
+                <div class="form-section">
+
+                    <h2>👤 Student Information</h2>
+
+                    <p>Update the basic student details.</p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Roll Number *</label>
+
+                        <input
+                            type="text"
+                            name="roll_no"
+                            value="{{ student.roll_no }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Student Name *</label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ student.name }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Department *</label>
+
+                        <select name="department" required>
+
+                            <option value="BCA"
+                                {% if student.department == "BCA" %}selected{% endif %}>
+                                BCA
+                            </option>
+
+                            <option value="BBA"
+                                {% if student.department == "BBA" %}selected{% endif %}>
+                                BBA
+                            </option>
+
+                            <option value="B.Tech"
+                                {% if student.department == "B.Tech" %}selected{% endif %}>
+                                B.Tech
+                            </option>
+
+                            <option value="MCA"
+                                {% if student.department == "MCA" %}selected{% endif %}>
+                                MCA
+                            </option>
+
+                            <option value="MBA"
+                                {% if student.department == "MBA" %}selected{% endif %}>
+                                MBA
+                            </option>
+
+                            <option value="Other"
+                                {% if student.department == "Other" %}selected{% endif %}>
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Semester *</label>
+
+                        <select name="semester" required>
+
+                            {% for i in range(1, 9) %}
+
+                                <option value="{{ i }}"
+                                    {% if student.semester == i %}selected{% endif %}>
+                                    Semester {{ i }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ student.email or '' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Phone</label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            value="{{ student.phone or '' }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-section performance-section">
+
+                    <h2>📊 Academic Performance</h2>
+
+                    <p>Update marks and attendance.</p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Marks (%)</label>
+
+                        <input
+                            type="number"
+                            name="marks"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            value="{{ student.marks or 0 }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Attendance (%)</label>
+
+                        <input
+                            type="number"
+                            name="attendance"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            value="{{ student.attendance or 0 }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a href="/students" class="cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-btn">
+                        ✓ Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <footer>
+
+            <div>
+                <p>Student Management System © 2026</p>
+                <p>Made by <strong>Manpreet Singh</strong></p>
+            </div>
+
+            <p>BCA Student Project</p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>
